@@ -2,27 +2,6 @@
  * Utils functions
  */
 
-const utils = module.exports = {};
-
-// /**
-//  * Sleeps the process using a promise
-//  *
-//  * @param {int} ms
-//  */
-// utils.getResourceList = function(ms) {
-//     return new Promise(resolve => {
-//         setTimeout(resolve,ms)
-//     })
-// };
-
-// /**
-//  * Escapes double quotes in strings so it doesn't break
-//  *
-//  */
-// utils.xsDQ = function(stringToEscape) {
-//     return stringToEscape.replace(/"/g,'\\\"');
-// }
-
 /**
  * Helper method to get the sort atrribute based on CLD metadata structures
  * @param {*} object CLD resource
@@ -49,10 +28,8 @@ function getSortingAttributeValue(object, sortParameter) {
  * SortParameter (of the individual objects).
  */
 function mergeObjectArrays(arrayA, arrayB, sortParameter) {
-  // eslint-disable-next-line arrow-body-style
-  return [...arrayA, ...arrayB].sort((a, b) => {
-    return getSortingAttributeValue(a, sortParameter) - getSortingAttributeValue(b, sortParameter);
-  });
+  // eslint-disable-next-line max-len
+  return [...arrayA, ...arrayB].sort((a, b) => getSortingAttributeValue(a, sortParameter) - getSortingAttributeValue(b, sortParameter));
 }
 
 module.exports = { mergeObjectArrays, getSortingAttributeValue };

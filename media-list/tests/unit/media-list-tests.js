@@ -92,7 +92,7 @@ describe('Test Lambda Handler', () => {
   });
 
   // eslint-disable-next-line no-undef
-  it(`Should not re-order resource list if not position added 
+  it(`Should not re-order resource list if no position added 
       tag: media-list-case4
       assets: 5 images
       attribute: Sturctured Metadata Field - position

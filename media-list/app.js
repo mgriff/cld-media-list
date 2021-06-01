@@ -27,11 +27,12 @@ function validateParameters(event) {
 }
 
 /**
- * LambdaHandler
+ * LambdaHandler to Combine image and video json lists
  * @param {*} event
  * @param {*} context
  * @returns
  */
+// eslint-disable-next-line no-unused-vars
 exports.lambdaHandler = async (event, context) => {
   try {
     validateParameters(event);
@@ -44,6 +45,10 @@ exports.lambdaHandler = async (event, context) => {
 
     response = {
       statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
       body: JSON.stringify(body),
     };
   } catch (err) {

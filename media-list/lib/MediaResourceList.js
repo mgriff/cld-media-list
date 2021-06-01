@@ -12,6 +12,12 @@ class MediaResourceList {
     this.tag = tag;
   }
 
+  /**
+   * Checks if the response returns successfully
+   * @param {node fetch response} response
+   * @returns response
+   * @throws CldResourceError
+   */
   static checkStatus(response) {
     if (response.ok) { // res.status >= 200 && res.status < 300
       return response;
@@ -21,6 +27,11 @@ class MediaResourceList {
     }
   }
 
+  /**
+   * Returns the resource list for the provided resourceType
+   * @param {String} resourceType either image or video
+   * @returns Resource List JSON
+   */
   async getResourceList(resourceType) {
     const url = `https://res.cloudinary.com/${this.cloudName}/${resourceType}/list/${this.tag}.json`;
 
@@ -32,7 +43,8 @@ class MediaResourceList {
         // add the resource type to the resources
         json.resources.map((resource) => {
           // eslint-disable-next-line no-param-reassign
-          resource.resource_type = resourceType;
+          resource.mediaType = resourceType;
+          return resource;
         });
         return json;
       })
@@ -43,9 +55,14 @@ class MediaResourceList {
             error_message: err.json(),
           };
         }
+        return err;
       });
   }
 
+  /**
+   * Method to return the combined Image and Video JSON list
+   * @returns combined media list
+   */
   async getMediaResourceList() {
     const imageJson = await this.getResourceList('image');
 
@@ -61,18 +78,6 @@ class MediaResourceList {
     if (imageJson.error_message !== undefined && videoJson.error_message !== undefined) {
       throw new CldResourceError(imageJson.error_message);
     }
-
-    // let errorString = '';
-    // if (imageJson.error_message !== undefined) {
-    //   errorString += `${imageJson.error_message.cldError} | `;
-    // }
-    // if (videoJson.error_message !== undefined) {
-    //   errorString += videoJson.error_message.cldError;
-    // }
-
-    // if (errorString !== '') {
-    //   mediaJson.error_message = errorString;
-    // }
 
     return mediaJson;
   }
