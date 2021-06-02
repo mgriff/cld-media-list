@@ -7,9 +7,10 @@ const { mergeObjectArrays } = require('./utils');
  * Media Resource List class
  */
 class MediaResourceList {
-  constructor(cloudName, tag) {
+  constructor(cloudName, tag, sortParameter) {
     this.cloudName = cloudName;
     this.tag = tag;
+    this.sortParameter = sortParameter;
   }
 
   /**
@@ -69,7 +70,7 @@ class MediaResourceList {
     const videoJson = await this.getResourceList('video');
 
     const mediaJson = {
-      resources: mergeObjectArrays(imageJson.resources, videoJson.resources, 'position'),
+      resources: mergeObjectArrays(imageJson.resources, videoJson.resources, this.sortParameter),
       updated_at: new Date().toISOString(),
     };
 

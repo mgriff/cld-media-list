@@ -17,7 +17,7 @@ function validateParameters(event) {
   } else if (event.pathParameters.proxy === undefined) {
     throw new ValidationError('Unsupported transformation');
   } else {
-    // We know proxy exists but not check it is in the form <tag>.json
+    // We know proxy exists but need to check it is in the form <tag>.json
     const proxyFilename = path.parse(event.pathParameters.proxy);
 
     if (proxyFilename.ext !== '.json') { // also catches when the call is for /.json as it is not treated as an extension
@@ -39,8 +39,13 @@ exports.lambdaHandler = async (event, context) => {
 
     const cloudName = event.pathParameters.cloud_name;
     const tag = path.parse(event.pathParameters.proxy).name;
+    let sortParameter = 'position';
 
-    const mediaList = new MediaResourceList(cloudName, tag);
+    if (event.queryStringParameters && event.queryStringParameters.sortby) {
+      sortParameter = event.queryStringParameters.sortby;
+    }
+
+    const mediaList = new MediaResourceList(cloudName, tag, sortParameter);
     const body = await mediaList.getMediaResourceList();
 
     response = {

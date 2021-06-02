@@ -2,6 +2,8 @@
  * Utils functions
  */
 
+const JSPath = require('jspath');
+
 /**
  * Helper method to get the sort atrribute based on CLD metadata structures
  * @param {*} object CLD resource
@@ -18,6 +20,13 @@ function getSortingAttributeValue(object, sortParameter) {
     && object.context.custom[sortParameter]) {
     // what happens if its not an int?
     positionValue = parseInt(object.context.custom[sortParameter], 10);
+  } else {
+    // check the Structured Metadata
+    const smdSortValue = JSPath.apply(`.metadata{.external_id === '${sortParameter}'}.value`, object)[0];
+
+    if (smdSortValue !== undefined) {
+      positionValue = parseInt(smdSortValue, 10);
+    }
   }
 
   return positionValue;

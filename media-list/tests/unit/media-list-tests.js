@@ -1,5 +1,5 @@
 const chai = require('chai');
-const app = require('../../app.js');
+const app = require('../../app');
 
 const { expect } = chai;
 
@@ -95,7 +95,6 @@ describe('Test Lambda Handler', () => {
   it(`Should not re-order resource list if no position added 
       tag: media-list-case4
       assets: 5 images
-      attribute: Sturctured Metadata Field - position
       order:
         246377866_kzy2fl
         162182692_uikbdq
@@ -119,5 +118,68 @@ describe('Test Lambda Handler', () => {
     expect(response.resources[2].public_id).to.be.equal(`${ROOT_DIRECTORY}_114319603_8866eb32-b95b-4a84-afd6-f15c11f80d57_y3szug`);
     expect(response.resources[3].public_id).to.be.equal(`${ROOT_DIRECTORY}3895_rrlsv8`);
     expect(response.resources[4].public_id).to.be.equal(`${ROOT_DIRECTORY}1583261816136_zhlb3y`);
+  });
+
+  // eslint-disable-next-line no-undef
+  it(`Should sort based on Structured Metadata field 
+      tag: media-list-case5
+      assets: 3 images and 2 videos
+      attribute: Sturctured Metadata Field - position
+      order:
+        number1
+        video2
+        number3
+        video4
+        number5`, async () => {
+    event.pathParameters.proxy = 'media-list-case5.json';
+
+    const result = await app.lambdaHandler(event, context);
+
+    expect(result).to.be.an('object');
+    expect(result.statusCode).to.equal(200);
+    expect(result.body).to.be.an('string');
+
+    const response = JSON.parse(result.body);
+
+    expect(response).to.be.an('object');
+    expect(response.resources.length === 5);
+    expect(response.resources[0].public_id).to.be.equal(`${ROOT_DIRECTORY}number1`);
+    expect(response.resources[1].public_id).to.be.equal(`${ROOT_DIRECTORY}video2`);
+    expect(response.resources[2].public_id).to.be.equal(`${ROOT_DIRECTORY}number3`);
+    expect(response.resources[3].public_id).to.be.equal(`${ROOT_DIRECTORY}video4`);
+    expect(response.resources[4].public_id).to.be.equal(`${ROOT_DIRECTORY}number5`);
+  });
+
+  // eslint-disable-next-line no-undef
+  it(`Should sort on a custom context metadata field 
+      tag: media-list-case5
+      assets: 3 images and 2 videos
+      attribute: Context metadata field - position_reversed
+      order:
+        number5
+        video4
+        number3
+        video2
+        number1`, async () => {
+    event.pathParameters.proxy = 'media-list-case5.json';
+    event.queryStringParameters = {
+      sortby: 'position_reversed',
+    };
+
+    const result = await app.lambdaHandler(event, context);
+
+    expect(result).to.be.an('object');
+    expect(result.statusCode).to.equal(200);
+    expect(result.body).to.be.an('string');
+
+    const response = JSON.parse(result.body);
+
+    expect(response).to.be.an('object');
+    expect(response.resources.length === 5);
+    expect(response.resources[0].public_id).to.be.equal(`${ROOT_DIRECTORY}number5`);
+    expect(response.resources[1].public_id).to.be.equal(`${ROOT_DIRECTORY}video4`);
+    expect(response.resources[2].public_id).to.be.equal(`${ROOT_DIRECTORY}number3`);
+    expect(response.resources[3].public_id).to.be.equal(`${ROOT_DIRECTORY}video2`);
+    expect(response.resources[4].public_id).to.be.equal(`${ROOT_DIRECTORY}number1`);
   });
 });
