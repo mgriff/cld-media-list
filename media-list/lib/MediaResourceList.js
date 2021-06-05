@@ -44,7 +44,7 @@ class MediaResourceList {
         // add the resource type to the resources
         json.resources.map((resource) => {
           // eslint-disable-next-line no-param-reassign
-          resource.mediaType = resourceType;
+          resource.resource_type = resourceType;
           return resource;
         });
         return json;

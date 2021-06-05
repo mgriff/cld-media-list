@@ -41,8 +41,8 @@ Tests are defined in the `media-list/tests` folder in this project. Use NPM to i
 
 ```bash
 media-list$ cd media-list
-hello-world$ npm install
-hello-world$ npm run test
+media-list$ npm install
+media-list$ npm run test
 ```
 
 ## Cleanup

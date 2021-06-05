@@ -121,7 +121,7 @@ describe('Test Lambda Handler', () => {
   });
 
   // eslint-disable-next-line no-undef
-  it(`Should sort based on Structured Metadata field 
+  it(`Should sort based on Structured Metadata field and match resource_types
       tag: media-list-case5
       assets: 3 images and 2 videos
       attribute: Sturctured Metadata Field - position
@@ -144,10 +144,15 @@ describe('Test Lambda Handler', () => {
     expect(response).to.be.an('object');
     expect(response.resources.length === 5);
     expect(response.resources[0].public_id).to.be.equal(`${ROOT_DIRECTORY}number1`);
+    expect(response.resources[0].resource_type).to.be.equal('image');
     expect(response.resources[1].public_id).to.be.equal(`${ROOT_DIRECTORY}video2`);
+    expect(response.resources[1].resource_type).to.be.equal('video');
     expect(response.resources[2].public_id).to.be.equal(`${ROOT_DIRECTORY}number3`);
+    expect(response.resources[2].resource_type).to.be.equal('image');
     expect(response.resources[3].public_id).to.be.equal(`${ROOT_DIRECTORY}video4`);
+    expect(response.resources[3].resource_type).to.be.equal('video');
     expect(response.resources[4].public_id).to.be.equal(`${ROOT_DIRECTORY}number5`);
+    expect(response.resources[4].resource_type).to.be.equal('image');
   });
 
   // eslint-disable-next-line no-undef
