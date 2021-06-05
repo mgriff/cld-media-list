@@ -54,6 +54,7 @@ exports.lambdaHandler = async (event, context) => {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
+        'cache-control': 'public, no-transform, max-age=60',
       },
       body: JSON.stringify(body),
     };
@@ -63,6 +64,7 @@ exports.lambdaHandler = async (event, context) => {
         statusCode: 400,
         headers: {
           'x-cld-error': err.message,
+          'cache-control': 'private, no-transform, max-age=0, no-cache',
         },
       };
     } else if (err instanceof CldResourceError) {
@@ -70,6 +72,7 @@ exports.lambdaHandler = async (event, context) => {
         statusCode: err.json().status,
         headers: {
           'x-cld-error': err.json().cldError,
+          'cache-control': 'private, no-transform, max-age=0, no-cache',
         },
       };
     } else {

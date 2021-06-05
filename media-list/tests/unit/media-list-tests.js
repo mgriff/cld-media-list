@@ -15,7 +15,7 @@ let context;
 // eslint-disable-next-line no-undef
 describe('Test Lambda Handler', () => {
   // eslint-disable-next-line no-undef
-  it(`Should return images and videos in the correct order
+  it(`Should return images and videos in the correct order and cache the resopnse
       tag: media-list-case1
       assets: 5 images, 1 video
       attribute: Custom metadata field - position
@@ -44,6 +44,9 @@ describe('Test Lambda Handler', () => {
     expect(response.resources[3].public_id).to.be.equal(`${ROOT_DIRECTORY}sea-turtle_nwblgm`);
     expect(response.resources[4].public_id).to.be.equal(`${ROOT_DIRECTORY}channel4`);
     expect(response.resources[5].public_id).to.be.equal(`${ROOT_DIRECTORY}5-types-of-software-licenses-2020-header`);
+
+    expect(result.headers['cache-control']).to.be.an('string');
+    expect(result.headers['cache-control']).to.be.equal('public, no-transform, max-age=60');
   });
 
   // eslint-disable-next-line no-undef
@@ -77,7 +80,7 @@ describe('Test Lambda Handler', () => {
   });
 
   // eslint-disable-next-line no-undef
-  it(`Should return a 400 error as no images or videos appear for the tag 
+  it(`Should return a 400 error as no images or videos appear for the tag, should not be cached
       tag: media-list-case3-not-used
       assets: 0 images and 0 videos
       order:`, async () => {
@@ -89,6 +92,9 @@ describe('Test Lambda Handler', () => {
     expect(result.statusCode).to.equal(404);
     expect(result.headers['x-cld-error']).to.be.an('string');
     expect(result.headers['x-cld-error']).to.be.equal('Resource not found - No resources found for type list media-list-case3-not-used');
+
+    expect(result.headers['cache-control']).to.be.an('string');
+    expect(result.headers['cache-control']).to.be.equal('private, no-transform, max-age=0, no-cache');
   });
 
   // eslint-disable-next-line no-undef
