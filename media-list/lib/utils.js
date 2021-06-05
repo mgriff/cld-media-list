@@ -18,7 +18,7 @@ function getSortingAttributeValue(object, sortParameter) {
     && object.context
     && object.context.custom
     && object.context.custom[sortParameter]) {
-    // what happens if its not an int?
+    // Expects an int value
     positionValue = parseInt(object.context.custom[sortParameter], 10);
   } else {
     // check the Structured Metadata

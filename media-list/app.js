@@ -41,6 +41,7 @@ exports.lambdaHandler = async (event, context) => {
     const tag = path.parse(event.pathParameters.proxy).name;
     let sortParameter = 'position';
 
+    // Update the sort parameter if it has been passed as a query string
     if (event.queryStringParameters && event.queryStringParameters.sortby) {
       sortParameter = event.queryStringParameters.sortby;
     }
